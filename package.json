@@ -1,0 +1,22 @@
+{
+  "name": "drivingapp-admin-back",
+  "version": "1.0.0",
+  "description": "DrivingApp Admin Backend ",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "ngsi-parser": "^2.2.4",
+    "node-crate": "^2.0.6",
+    "node-fetch": "^2.2.0",
+    "ocb-sender": "^2.4.2",
+    "socket.io": "^2.1.1"
+  }
+}
