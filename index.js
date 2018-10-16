@@ -39,9 +39,17 @@ app.get("/alerts/count/zone", (req, res) => {
     res.json(zonesAlerts);
 });
 
+app.get ("/choices/best", (req, res)=> {
+    crate.execute("select alertsource, count(*) as total from etalert where alertsource like 'Device_Smartphone_%' group by alertsource order by total desc limit 10", [])
+    .then((result) =>{
+        res.json(result.json)
+    })
+}) 
+
+
+
 
 function getSeverityAlerts(){
-    console.log("Getting Severity Alerts");
     crate.execute("select  etalert.severity, count(*) from etalert group by etalert.severity", [])
     .then((result) => {
         temp = {};
@@ -54,7 +62,6 @@ function getSeverityAlerts(){
 }
 
 function getCategoryAlerts (){
-    console.log("Getting category alerts");
     crate.execute("select etalert.category, count(*) as total from etalert group by etalert.category", [])
     .then((result) => {
         temp = {};
@@ -67,7 +74,6 @@ function getCategoryAlerts (){
 }
 
 function getZoneAlerts() {
-        console.log("Calculating zonealerts");
         fetch ("https://smartsecurity-webservice.herokuapp.com/api/zone?status=1")
         .then((response) => {return response.json()})
         .then((zones) => {
@@ -97,7 +103,7 @@ setInterval (()=> {
     getZoneAlerts();
     getCategoryAlerts();
     getSeverityAlerts();
-}, 10000); 
+}, 600000); 
 
 const port = process.env.PORT || 3002;
 http.listen(port, function(){
