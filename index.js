@@ -11,7 +11,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({extended:false})); 
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(cors());
