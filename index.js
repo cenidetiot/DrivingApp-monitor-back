@@ -39,15 +39,27 @@ app.get("/alerts/count/zone", (req, res) => {
     res.json(zonesAlerts);
 });
 
-app.get ("/choices/best", (req, res)=> {
-    crate.execute("select alertsource, count(*) as total from etalert where alertsource like 'Device_Smartphone_%' group by alertsource order by total desc limit 10", [])
-    .then((result) =>{
-        res.json(result.json)
+app.get ("/awards/best", (req, res)=> {
+    crate.execute("select  count(*) as total, owner  from etalert, (select owner, entity_id as id from etdevice  group by id,owner limit 100 ) as devices where alertsource like 'Device_Smartphone_%' and id = alertsource group by alertsource, owner order by total desc limit 5", [])
+    .then(async (sources) =>{
+        var temp = [];
+        sources.json.push({
+            owner : "User_1524067170397",
+            total :1 
+        })
+        sources.json.push({
+            owner : "User_1525461543939",
+            total : 1
+        })
+        sources.json.map((source, i) => {
+            source["place"] = i + 1;
+            temp.push(source)
+        })
+        
+        res.json(sources.json)
     })
+    
 }) 
-
-
-
 
 function getSeverityAlerts(){
     crate.execute("select  etalert.severity, count(*) from etalert group by etalert.severity", [])
@@ -105,7 +117,7 @@ setInterval (()=> {
     getSeverityAlerts();
 }, 600000); 
 
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3500;
 http.listen(port, function(){
     console.log('listening on ' + port);
 });
