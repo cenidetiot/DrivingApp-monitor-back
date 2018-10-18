@@ -40,7 +40,7 @@ app.get("/alerts/count/zone", (req, res) => {
 });
 
 app.get ("/awards/best", (req, res)=> {
-    crate.execute("select  count(*) as total, owner  from etalert, (select owner, entity_id as id from etdevice  group by id,owner limit 100 ) as devices where alertsource like 'Device_Smartphone_%' and id = alertsource group by alertsource, owner order by total desc limit 5", [])
+    crate.execute("select  count(*) as total, owner  from etalert, ( select owner, entity_id as id from etdevice group by id,owner limit 100 ) as devices where alertsource like 'Device_Smartphone_%' and id = alertsource and (subcategory='unknown' OR subcategory='carAccident' or subcategory='trafficJam') group by alertsource, owner order by total desc limit 5;", [])
     .then(async (sources) =>{
         var temp = [];
         sources.json.push({
