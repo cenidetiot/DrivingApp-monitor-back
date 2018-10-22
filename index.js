@@ -117,8 +117,8 @@ function getZoneAlerts() {
                 fetch(`https://smartsecurity-webservice.herokuapp.com/service/alerts/zone/history/${id}?id=Alert:Device_Smartphone_.*&location=false`)
                 .then((result) =>{
                     zonesAlerts[id] = {
-                        //count : result.headers.get("fiware-total-count"),
-                        count : Math.random() * (10000 - 1) + 1,
+                        count : result.headers.get("fiware-total-count"),
+                        //count : Math.random() * (10000 - 1) + 1,
                         name : zone["name"]
                     }
                     io.emit('zonealerts', zonesAlerts);
