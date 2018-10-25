@@ -54,8 +54,7 @@ app.get ("/awards/best", (req, res)=> {
 }) 
 
 app.get ("/awards/worst", (req, res)=> {
-    //crate.execute("select  count(*) as total, owner  from etalert, ( select owner, entity_id as id from etdevice group by id,owner limit 100 ) as devices where alertsource like 'Device_Smartphone_%' and id = alertsource and (subcategory='speeding' OR subcategory='suddenStop' or subcategory='wrongWay') group by alertsource, owner order by total desc limit 5;", [])
-    crate.execute("select  count(*) as total, owner  from etalert, ( select owner, entity_id as id from etdevice group by id,owner limit 100 ) as devices where alertsource like 'Device_Smartphone_%' and id = alertsource and (subcategory='unknown' OR subcategory='carAccident' or subcategory='trafficJam') group by alertsource, owner order by total desc limit 5;", [])
+    crate.execute("select  count(*) as total, owner  from etalert, ( select owner, entity_id as id from etdevice group by id,owner limit 100 ) as devices where alertsource like 'Device_Smartphone_%' and id = alertsource and (subcategory='suddenStop' OR subcategory='wrongWay' or subcategory='speeding') group by alertsource, owner order by total desc limit 5;", [])
     .then(async (sources) =>{
         var temp = [];
         sources.json.map((source, i) => {
