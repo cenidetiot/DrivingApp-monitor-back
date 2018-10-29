@@ -39,6 +39,20 @@ app.get("/alerts/count/zone", (req, res) => {
     res.json(zonesAlerts);
 });
 
+app.get("/alerts/all/zone/:id", (req, res) =>{
+    console.log(`https://smartsecurity-webservice.herokuapp.com/service/alerts/zone/all/${req.params.id}?id=Alert:Device_Smartphone_.*&location=false`)
+    fetch (`https://smartsecurity-webservice.herokuapp.com/service/alerts/zone/all/${req.params.id}?id=Alert:Device_Smartphone_.*&location=false`)
+    .then((result) =>{
+        return result.json();
+    })
+    .then((result) =>{
+        res.json(result)
+    })
+    .catch((error) =>{
+        res.status(500).send("The smart service don't response")
+    })
+});
+
 app.get ("/awards/best", (req, res)=> {
     crate.execute("select  count(*) as total, owner  from etalert, ( select owner, entity_id as id from etdevice group by id,owner limit 100 ) as devices where alertsource like 'Device_Smartphone_%' and id = alertsource and (subcategory='unknown' OR subcategory='carAccident' or subcategory='trafficJam') group by alertsource, owner order by total desc limit 5;", [])
     .then(async (sources) =>{
@@ -47,7 +61,6 @@ app.get ("/awards/best", (req, res)=> {
             source["place"] = i + 1;
             temp.push(source)
         })
-        
         res.json(sources.json)
     })
     
