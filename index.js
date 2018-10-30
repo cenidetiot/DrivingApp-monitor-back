@@ -46,6 +46,13 @@ app.get("/alerts/all/zone/:id", (req, res) =>{
         return result.json();
     })
     .then((result) =>{
+        for (let alert in result){
+            delete result[alert]["validTo"]
+            delete result[alert]["validFrom"]
+            delete result[alert]["dateCreated"]
+            delete result[alert]["type"]
+            delete result[alert]["alertSource"]
+        }
         res.json(result)
     })
     .catch((error) =>{
