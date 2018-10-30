@@ -116,7 +116,7 @@ function getZoneAlerts() {
                         count : result.headers.get("fiware-total-count"),
                         //count : Math.random() * (10000 - 1) + 1,
                         name : zone["name"],
-                        centerPoint : zone["centerPoint"]
+                        location : zone["location"]
                     }
                     io.emit('zonealerts', zonesAlerts);
                 })
