@@ -40,7 +40,7 @@ app.get("/alerts/count/zone", (req, res) => {
 });
 
 app.get("/alerts/all/zone/:id", (req, res) =>{
-    fetch (`https://smartsecurity-webservice.herokuapp.com/service/alerts/zone/all/${req.params.id}?id=Alert:Device_Smartphone_.*&location=false`)
+    fetch (`https://smartsecurity-webservice.herokuapp.com/service/alerts/zone/history/${req.params.id}?id=Alert:Device_Smartphone_.*&location=false`)
     .then((result) =>{
         return result.json();
     })
@@ -120,28 +120,13 @@ function getZoneAlerts() {
         .then((zones) => {
             zones.map((zone) => {
                 let id = zone["idZone"]
-                //console.log(`https://smartsecurity-webservice.herokuapp.com/service/alerts/zone/all/${id}?id=Alert:Device_Smartphone_.*&location=false`)
-                fetch(`https://smartsecurity-webservice.herokuapp.com/service/alerts/zone/all/${id}?id=Alert:Device_Smartphone_.*&location=false`)
-                .then((result) =>{
-                    zonesAlerts[id] = {
-                        count : result.headers.get("fiware-total-count"),
-                        //count : Math.random() * (10000 - 1) + 1,
-                        name : zone["name"],
-                        location : zone["location"],
-                    }
-                    return result.json();
-                })
-                .then((alerts) => {
-                    for (let alert in alerts){
-                        delete alerts[alert]["validTo"]
-                        delete alerts[alert]["validFrom"]
-                        delete alerts[alert]["dateCreated"]
-                        delete alerts[alert]["type"]
-                        delete alerts[alert]["alertSource"]
-                    }
-                    zonesAlerts[id].alerts = alerts;
-                    io.emit('zonealerts', zonesAlerts);
-                })
+                zonesAlerts[id] = {
+                    count : result.headers.get("fiware-total-count"),
+                    //count : Math.random() * (10000 - 1) + 1,
+                    name : zone["name"],
+                    location : zone["location"],
+                }
+                
             })
             console.log("Alerts by Zone and zones are loaded")
         })     
