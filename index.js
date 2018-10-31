@@ -40,7 +40,7 @@ app.get("/alerts/count/zone", (req, res) => {
 });
 
 app.get("/alerts/all/zone/:id", (req, res) =>{
-    fetch (`https://smartsecurity-webservice.herokuapp.com/service/alerts/zone/history/${req.params.id}?id=Alert:Device_Smartphone_.*&location=false`)
+    fetch (`https://smartsecurity-webservice.herokuapp.com/service/alerts/zone/all/${req.params.id}?id=Alert:Device_Smartphone_.*&location=false`)
     .then((result) =>{
         return result.json();
     })
@@ -120,13 +120,17 @@ function getZoneAlerts() {
         .then((zones) => {
             zones.map((zone) => {
                 let id = zone["idZone"]
-                zonesAlerts[id] = {
-                    count : result.headers.get("fiware-total-count"),
-                    //count : Math.random() * (10000 - 1) + 1,
-                    name : zone["name"],
-                    location : zone["location"],
-                }
-                
+                //console.log(`https://smartsecurity-webservice.herokuapp.com/service/alerts/zone/all/${id}?id=Alert:Device_Smartphone_.*&location=false`)
+                fetch(`https://smartsecurity-webservice.herokuapp.com/service/alerts/zone/history/${id}?id=Alert:Device_Smartphone_.*&location=false`)
+                .then((result) =>{
+                    zonesAlerts[id] = {
+                        count : result.headers.get("fiware-total-count"),
+                        //count : Math.random() * (10000 - 1) + 1,
+                        name : zone["name"],
+                        location : zone["location"],
+                    }
+                    io.emit('zonealerts', zonesAlerts);
+                })
             })
             console.log("Alerts by Zone and zones are loaded")
         })     
